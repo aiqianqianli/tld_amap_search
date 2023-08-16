@@ -68,8 +68,7 @@
             [waypoints addObject:origin];
             [waypoints addObject:destination];
             //构造高德地图检索请求
-            AMapDrivingRouteSearchRequest *navi = [[AMapDrivingRouteSearchRequest alloc] init];
-            navi.requireExtension = YES;
+            AMapDrivingCalRouteSearchRequest *navi = [[AMapDrivingCalRouteSearchRequest alloc] init];
             if(![drivingMode isEqual:[NSNull null]]){
                 navi.strategy = drivingMode.intValue;
             }
@@ -77,9 +76,9 @@
             navi.destination = destination;
             navi.waypoints = waypoints;
             //发送请求
-            [self.search AMapDrivingRouteSearch:navi];
+            [self.search AMapDrivingV2RouteSearch:navi];
         } else if ( ([@"truckRouteSearch" isEqualToString:call.method])) {
-            NSString* wayPointsJson = args[@"wayPointsJson"];
+//            NSString* wayPointsJson = args[@"wayPointsJson"];
             double lat1 = [args[@"startLat"] doubleValue];
             double lng1 = [args[@"startLng"] doubleValue];
             double lat2 = [args[@"endLat"] doubleValue];
@@ -129,7 +128,6 @@
     request.page = page;
     request.city = city;
     request.offset = limit;
-    request.requireExtension    = YES;
     [self.search AMapPOIAroundSearch:request];
 }
 
@@ -138,10 +136,8 @@
     AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
     request.keywords            = keyWord;
     request.city                = city;
-    request.requireExtension    = YES;
     //搜索SDK 3.2.0 中新增加的功能，只搜索本城市的POI
     request.cityLimit           = YES;
-    request.requireSubPOIs      = YES;
     [self.search AMapPOIKeywordsSearch:request];
 }
 
@@ -267,6 +263,7 @@
         }
     }
 }
+
 
 /* 地理编码*/
 - (void)onGeocodeSearchDone:(AMapGeocodeSearchRequest *)request response:(AMapGeocodeSearchResponse *)response{

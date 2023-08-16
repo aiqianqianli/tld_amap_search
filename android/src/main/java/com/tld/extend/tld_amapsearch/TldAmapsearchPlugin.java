@@ -114,15 +114,16 @@ public class TldAmapsearchPlugin implements FlutterPlugin, MethodCallHandler, Ac
         break;
       case "reGeocoding":
         //逆地理编码
-        Integer scope = call.argument("scope");
-        if (scope == null) scope = 300;
+//        Integer scope = call.argument("scope");
+//        if (scope == null) scope = 300;
         LatLonPoint latLonPoint  = new LatLonPoint(call.argument("latitude"), call.argument("longitude"));
-        getGeocodingClient().reGeocoding(latLonPoint, scope, new SearchBack() {
+        getGeocodingClient().reGeocoding(latLonPoint, 300, new SearchBack() {
           @Override
           public void back(final int code,final Map<String,Object> map) {
             result.success(JsonUtil.toJson(toResult(code,map)));
           }
         });
+        break;
       case "routeSearch": {
         //线路规划
         Integer drivingMode = call.argument("drivingMode");
